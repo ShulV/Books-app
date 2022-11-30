@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Person editing form</title>
+
+  <link rel="stylesheet" type="text/css" href="../../assets/css/style.css">
+</head>
+<body>
+<h2>Страница редактирования данных человека</h2>
+<form th:method="PATCH" th:action="@{/people/{id}(id=${person.getId()})}" th:object="${person}" class="form">
+  <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+  <div class="form__field">
+    <label th:for="name">Введите имя:</label>
+    <input type="text" id="name" th:field="*{name}" />
+  </div>
+  <div style="color:red" th:if="${#fields.hasErrors('patronymic')}" th:errors="*{patronymic}">Patronymic Error</div>
+  <div class="form__field">
+    <label th:for="patronymic">Введите отчество:</label>
+    <input type="text" id="patronymic" th:field="*{patronymic}"/>
+  </div>
+  <div style="color:red" th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}">Surname Error</div>
+  <div class="form__field">
+    <label th:for="surname">Введите фамилию:</label>
+    <input type="text" id="surname" th:field="*{surname}" />
+  </div>
+  <div style="color:red" th:if="${#fields.hasErrors('birthday')}" th:errors="*{birthday}">Birthday Error</div>
+  <div class="form__field">
+    <label th:for="birthday">Выберите дату рождения:</label>
+    <input type="date" th:field="*{birthday}" id="birthday"/>
+  </div>
+  <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+  <div class="form__field">
+    <label th:for="email">Введите email:</label>
+    <input type="text" id="email" th:field="*{email}" />
+  </div>
+  <input class="form__btn-submit" type="submit" value="Изменить"/>
+</form>
+</body>
+</html>

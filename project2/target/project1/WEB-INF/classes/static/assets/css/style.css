@@ -1,0 +1,16 @@
+
+.form {
+    width: 500px;
+    padding: 20px;
+}
+
+.form__field {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.form__btn-submit {
+    margin-top: 10px;
+}
