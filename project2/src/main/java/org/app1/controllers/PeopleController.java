@@ -4,6 +4,7 @@ package org.app1.controllers;
 
 import org.app1.dao.PersonDAO;
 import org.app1.models.Person;
+import org.app1.services.PeopleService;
 import org.app1.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,29 +19,31 @@ import java.util.Optional;
 @RequestMapping("/people")
 public class PeopleController {
 
-    private final PersonDAO personDAO;
+//    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
+
     private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PersonDAO personDAO, PersonValidator personValidator) {
-        this.personDAO = personDAO;
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
+        this.peopleService = peopleService;
         this.personValidator = personValidator;
     }
 
     //запрос на получение страницы со списком всех людей
     @GetMapping()
     public String index(Model model) {
-        model.addAttribute("people", personDAO.index());
+        model.addAttribute("people", peopleService.getAllPeople());
         return "people/index";
     }
 
     //запрос на получение страницы с определенным человеком
     @GetMapping("/{id}")
     public String personPage(@PathVariable int id, Model model) {
-        Optional<Person> person = personDAO.getPerson(id);
+        Optional<Person> person = peopleService.getPersonById(id);
         if (person.isPresent()) {
             model.addAttribute("person", person.get());
-            model.addAttribute("books", personDAO.getBooksByPerson(id));
+            model.addAttribute("books", peopleService.getBooksByPerson(id));
             return "people/person";
         }
         else {
@@ -62,14 +65,14 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/new-person";
 
-        personDAO.save(person);
+        peopleService.save(person);
         return "redirect:/people";
     }
 
     //запрос на получение страницы изменения человека
     @GetMapping("/{id}/edit")
     public String editPersonPage(Model model, @PathVariable int id) {
-        Optional<Person> selectedPerson = personDAO.getPerson(id);
+        Optional<Person> selectedPerson = peopleService.getPersonById(id);
         if (selectedPerson.isPresent()) {
             model.addAttribute("person", selectedPerson.get());
             return "/people/edit-person";
@@ -85,14 +88,14 @@ public class PeopleController {
         if (bindingResult.hasErrors())
             return "people/edit-person";
 
-        personDAO.update(updatedPerson, id);
+        peopleService.updateById(updatedPerson, id);
         return "redirect:/people/" + id;
     }
 
     //запрос на удаление человека
     @DeleteMapping("/{id}")
     public String delete(@PathVariable int id) {
-        personDAO.delete(id);
+        peopleService.deleteById(id);
         return "redirect:/people";
     }
 }
