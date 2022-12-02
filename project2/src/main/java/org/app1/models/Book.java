@@ -3,23 +3,39 @@ package org.app1.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
+@Entity
+@Table(name = "books")
 public class Book {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name")
     @NotEmpty(message = "Название не должно быть пустым")
     @Size(min = 2, max = 50, message = "Название должно быть от 2 до 50 символов")
     private String name;
+
+    @Column(name = "author")
     @NotEmpty(message = "Поле автор не должно быть пустым")
     @Size(min = 2, max = 100, message = "Поле автор должно быть от 2 до 100 символов")
     private String author;
+
+    @Column(name = "date")
     @NotNull(message = "Дата не должна быть пустой")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
+
+    @ManyToOne
+    @JoinColumn(name = "person_id", referencedColumnName = "id")
+    private Person owner;
 
     public Book(int id, String name, String author, LocalDate date) {
         this.id = id;
@@ -66,5 +82,13 @@ public class Book {
 
     public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
     }
 }

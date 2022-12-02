@@ -7,31 +7,50 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
+@Entity
+@Table(name = "people")
 public class Person {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Column(name = "name")
     @NotEmpty(message = "Имя не должен быть пустым")
     @Size(min = 2, max = 30, message = "Длина имени должна быть от 2 до 30 символов")
     private String name;
+
+    @Column(name = "patronymic")
     @NotEmpty(message = "Отчество не должно быть пустым")
     @Size(min = 2, max = 30, message = "Длина отчества должна быть от 2 до 30 символов")
     private String patronymic;
+
+    @Column(name = "surname")
     @NotEmpty(message = "Фамилия не должна быть пустой")
     @Size(min = 2, max = 30, message = "Длина фамилии должна быть от 2 до 30 символов")
     private String surname;
+
+    @Column(name = "birthday")
     @NotNull(message = "Дата не должна быть пустой")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate birthday;
 
+    @Column(name = "email")
     @NotNull(message = "Email не должен быть пустой")
     @Email(message = "Email должен быть валидным")
     private String email;
+
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
+    private List<Book> books;
 
     public Person() {
     }
@@ -101,15 +120,11 @@ public class Person {
         this.email = email;
     }
 
-    @Override
-    public String toString() {
-        return "Person{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", patronymic='" + patronymic + '\'' +
-                ", surname='" + surname + '\'' +
-                ", birthday=" + birthday +
-                ", email='" + email + '\'' +
-                '}';
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 }
