@@ -54,13 +54,11 @@ public class PeopleService {
 
     @Transactional
     public void deleteById(int id) {
-        System.out.println("dele");
         peopleRepository.deleteById(id);
     }
 
     @Transactional
     public void updateById(Person updatedPerson, int id) {
-        System.out.println("upda");
         updatedPerson.setId(id);
         peopleRepository.save(updatedPerson);
     }

@@ -1,10 +1,10 @@
 package org.app1.controllers;
 
 
-import org.app1.dao.PersonDAO;
 import org.app1.models.Book;
 import org.app1.models.Person;
 import org.app1.services.BooksService;
+import org.app1.services.PeopleService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,18 +19,25 @@ import java.util.Optional;
 @RequestMapping("/books")
 public class BooksController {
     private final BooksService booksService;
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
 
     @Autowired
-    public BooksController(BooksService booksService, PersonDAO personDAO) {
+    public BooksController(BooksService booksService, PeopleService peopleService) {
         this.booksService = booksService;
-        this.personDAO = personDAO;
+        this.peopleService = peopleService;
     }
 
     //запрос на получение страницы со списком всех книг
     @GetMapping()
-    public String allBooksPage(@NotNull Model model) {
-        model.addAttribute("books", booksService.getAllBooks());
+    public String allBooksPage(@NotNull Model model,
+                               @RequestParam(name = "page", required = false) Integer page,
+                               @RequestParam(name = "books_per_page", required = false) Integer booksPerPage,
+                               @RequestParam(name = "sort_by_date", required = false) boolean sortByDate) {
+
+        if (page == null || booksPerPage == null)
+            model.addAttribute("books", booksService.findAll(sortByDate));
+        else
+            model.addAttribute("books", booksService.findWithPagination(page, booksPerPage, sortByDate));
         return "books/all-books";
     }
     //запрос на получение страницы с определенной книгой
@@ -44,7 +51,7 @@ public class BooksController {
                 model.addAttribute("person_owner", personOwner.get());
             }
             else {
-                model.addAttribute("people", personDAO.index());
+                model.addAttribute("people", peopleService.getAllPeople());
             }
             return "books/book";
         }

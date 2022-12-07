@@ -1,7 +1,7 @@
 package org.app1.util;
 
-import org.app1.dao.PersonDAO;
 import org.app1.models.Person;
+import org.app1.services.PeopleService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -10,12 +10,14 @@ import org.springframework.validation.Validator;
 
 @Component
 public class PersonValidator implements Validator {
-    private final PersonDAO personDAO;
+
+    private final PeopleService peopleService;
 
     @Autowired
-    public PersonValidator(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public PersonValidator(PeopleService peopleService) {
+        this.peopleService = peopleService;
     }
+
     //поддержка валидируемых классов (только Person)
     @Override
     public boolean supports(@NotNull Class<?> aClass) {
@@ -26,8 +28,9 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        boolean isExistingId = personDAO.getPerson(person.getId()).isPresent();
-        boolean isExistingEmail = personDAO.getPersonByEmail(person.getEmail()).isPresent();
+        boolean isExistingId = peopleService.getPersonById(person.getId()).isPresent();
+
+        boolean isExistingEmail = peopleService.getPersonByEmail(person.getEmail()).isPresent();
         if (!isExistingId && isExistingEmail) {
             // поле, код ошибки, сообщение ошибки
             errors.rejectValue("email", "", "Этот email уже используется");
