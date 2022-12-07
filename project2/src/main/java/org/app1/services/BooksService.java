@@ -76,4 +76,8 @@ public class BooksService {
             book.setOwner(null);
         });
     }
+
+    public List<Book> searchByTitle(String query) {
+        return booksRepository.findByNameStartingWith(query);
+    }
 }
