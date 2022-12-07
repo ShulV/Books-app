@@ -1,26 +1,29 @@
 package org.app1.services;
 
+import org.app1.dao.BookDAO;
 import org.app1.models.Book;
 import org.app1.models.Person;
 import org.app1.repositories.BooksRepository;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.awt.print.Pageable;
-import java.time.Period;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 public class BooksService {
+
+    private final BookDAO bookDAO;
     private final BooksRepository booksRepository;
 
     @Autowired
-    public BooksService(BooksRepository booksRepository) {
+    public BooksService(BookDAO bookDAO, BooksRepository booksRepository) {
+        this.bookDAO = bookDAO;
         this.booksRepository = booksRepository;
     }
 
@@ -28,13 +31,17 @@ public class BooksService {
         if (sort_by_year) {
             return booksRepository.findAll(Sort.by("date"));
         }
-        return booksRepository.findAll();
+        return bookDAO.getBooksWithAuthors();
     }
 
     public List<Book> findWithPagination(Integer page, Integer booksPerPage, boolean sort_by_year) {
         if (sort_by_year) {
+            Hibernate.initialize(booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("date")))
+                    .getContent());
             return booksRepository.findAll(PageRequest.of(page, booksPerPage, Sort.by("date"))).getContent();
         }
+        Hibernate.initialize(booksRepository.findAll(PageRequest.of(page, booksPerPage))
+                .getContent());
         return booksRepository.findAll(PageRequest.of(page, booksPerPage)).getContent();
     }
 

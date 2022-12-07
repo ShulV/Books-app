@@ -14,11 +14,11 @@
     <label th:for="name">Введите название:</label>
     <input type="text" th:field="*{name}" id="name"/>
   </div>
-  <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author Error</div>
-  <div class="form__field">
-    <label th:for="author">Введите автора:</label>
-    <input type="text" th:field="*{author}" id="author"/>
-  </div>
+<!--  <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author Error</div>-->
+<!--  <div class="form__field">-->
+<!--    <label th:for="author">Введите автора:</label>-->
+<!--    <input type="text" th:field="*{author}" id="author"/>-->
+<!--  </div>-->
   <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
   <div class="form__field">
     <label th:for="date">Выберите дату:</label>
