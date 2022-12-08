@@ -10,9 +10,9 @@
     <a th:href="@{/books/{id}(id=${book.getId()})}">
         <span th:text="${book.getName()}"></span>
         <span th:text="${book.getYear()}"></span>
-        <ol th:each="author : ${book.getAuthors()}">
+        <ul th:each="author : ${book.getAuthors()}">
             <li th:text="${author.getName()}"></li>
-        </ol>
+        </ul>
     </a>
 </div>
 <hr>

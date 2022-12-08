@@ -3,16 +3,19 @@ package org.app1.controllers;
 
 import org.app1.models.Book;
 import org.app1.models.Person;
+import org.app1.services.AuthorsService;
 import org.app1.services.BooksService;
 import org.app1.services.PeopleService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Collections;
 import java.util.Optional;
 
 @Controller
@@ -20,11 +23,13 @@ import java.util.Optional;
 public class BooksController {
     private final BooksService booksService;
     private final PeopleService peopleService;
+    private final AuthorsService authorsService;
 
     @Autowired
-    public BooksController(BooksService booksService, PeopleService peopleService) {
+    public BooksController(BooksService booksService, PeopleService peopleService, AuthorsService authorsService) {
         this.booksService = booksService;
         this.peopleService = peopleService;
+        this.authorsService = authorsService;
     }
 
     //запрос на получение страницы со списком всех книг
@@ -41,10 +46,12 @@ public class BooksController {
         return "books/all-books";
     }
     //запрос на получение страницы с определенной книгой
+    @Transactional
     @GetMapping("/{id}")
     public String bookPage(@PathVariable int id, Model model, @ModelAttribute("person") Person person) {
         Optional<Book> book = booksService.findById(id);
         if (book.isPresent()) {
+
             model.addAttribute("book", book.get());
             Optional<Person> personOwner = booksService.getOwner(id);
             if (personOwner.isPresent()) {
@@ -62,18 +69,19 @@ public class BooksController {
     }
     //запрос на получение страницы добавления книги
     @GetMapping("/new")
-    public String newBookPage(@ModelAttribute("book") Book book) {
-//        model.addAttribute("book", new Book());
+    public String newBookPage(Model model,
+                              @ModelAttribute("book") Book book) {
+        model.addAttribute("authors", authorsService.getAllAuthors());
         return "books/new-book";
     }
     //запрос на добавление новой книги
     @PostMapping()
     public String createBook(@ModelAttribute("book") @Valid Book book,
                              @NotNull BindingResult bindingResult) {
-        if (bindingResult.hasErrors())
+        if (bindingResult.hasErrors()) {
             return "books/new-book";
-
-        booksService.save(book);
+        }
+        booksService.saveWithAuthorsIdString(book);
         return "redirect:/books";
     }
     //запрос на получение страницы изменения книги

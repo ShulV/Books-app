@@ -39,8 +39,11 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
 
-    @ManyToMany(mappedBy = "books")
+    @ManyToMany(mappedBy = "books", fetch =FetchType.EAGER)
     private List<Author> authors;
+
+    @Transient
+    private String authorsIdString; //for form
 
     public Book(int id, String name, LocalDate date) {
         this.id = id;
@@ -102,6 +105,14 @@ public class Book {
 
     public void setAuthors(List<Author> authors) {
         this.authors = authors;
+    }
+
+    public String getAuthorsIdString() {
+        return authorsIdString;
+    }
+
+    public void setAuthorsIdString(String authorsIdString) {
+        this.authorsIdString = authorsIdString;
     }
 
     @Override

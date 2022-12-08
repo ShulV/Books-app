@@ -14,6 +14,18 @@
     <label th:for="name">Введите название:</label>
     <input type="text" th:field="*{name}" id="name"/>
   </div>
+  <div style="color:red" th:if="${#fields.hasErrors('authorsIdString')}" th:errors="*{authorsIdString}">Authors Error</div>
+  <div class="form__field">
+    <label>Выберите человека: </label>
+    <select th:field="*{authorsIdString}" id="author" size="10" multiple="multiple">
+      <option th:each="author : ${authors}"
+              th:value="${author.getId()}"
+              th:text="${author.getName()}">
+      </option>
+    </select>
+  </div>
+
+
 <!--  <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author Error</div>-->
 <!--  <div class="form__field">-->
 <!--    <label th:for="author">Введите автора:</label>-->

@@ -10,9 +10,9 @@
 <div>
   <span th:text="${book.getName()}"></span>,
   <span th:text="${book.getYear()}"></span>
-  <div th:each="author : ${book.getAuthors()}">
-    <span th:text="${author.getName()}"></span>
-  </div>
+  <ul th:each="author : ${book.getAuthors()}">
+    <li th:text="${author.getName()}"></li>
+  </ul>
 </div>
 <!---->
 <hr>
