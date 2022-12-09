@@ -5,6 +5,14 @@
     <title>Person list</title>
 </head>
 <body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search">Поиск книг</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+    </ul>
+</div>
+<!---->
 <h2>Страница со списком всех людей</h2>
 <div th:each="person : ${people}">
     <a th:href="@{/people/{id}(id=${person.getId()})}">

@@ -5,6 +5,14 @@
     <title>Search</title>
 </head>
 <body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search">Поиск книг</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+    </ul>
+</div>
+<!---->
 <h2>Страница поиска книги</h2>
 <form th:method="post" th:action="@{/books/search}" class="form">
     <label th:for="query">Введите поисковой запрос:</label>
