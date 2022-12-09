@@ -1,6 +1,9 @@
 package org.app1.services;
 
+import org.app1.dao.AuthorDAO;
+import org.app1.dao.BookDAO;
 import org.app1.models.Author;
+import org.app1.models.Book;
 import org.app1.repositories.AuthorsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +17,12 @@ import java.util.Optional;
 public class AuthorsService {
 
     private final AuthorsRepository authorsRepository;
+    private final AuthorDAO authorDAO;
 
     @Autowired
-    public AuthorsService(AuthorsRepository authorsRepository) {
+    public AuthorsService(AuthorsRepository authorsRepository, AuthorDAO authorDAO) {
         this.authorsRepository = authorsRepository;
+        this.authorDAO = authorDAO;
     }
 
     public List<Author> getAllAuthors() {
@@ -28,4 +33,13 @@ public class AuthorsService {
        return authorsRepository.findById(id);
     }
 
+    @Transactional
+    public void unlinkBookFromAuthors(Book book) {
+        List<Author> authors = authorDAO.getAuthorsByBook(book);
+        for (Author a: authors
+             ) {
+            a.removeBook(book);
+        }
+//        authorsRepository.saveAll(authors);
+    }
 }

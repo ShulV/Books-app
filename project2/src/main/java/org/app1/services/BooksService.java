@@ -65,7 +65,14 @@ public class BooksService {
 
     @Transactional
     public void deleteById(int id) {
-        booksRepository.deleteById(id);
+        //отвязали данную книгу от всех авторов
+        Optional<Book> book = booksRepository.findById(id);
+        if(book.isPresent()){
+            authorsService.unlinkBookFromAuthors(book.get());
+            //удалили книгу
+            booksRepository.deleteById(id);
+        }
+
     }
 
     public Optional<Person> getOwner(int id) {

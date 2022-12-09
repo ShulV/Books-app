@@ -39,7 +39,8 @@ public class Book {
     @JoinColumn(name = "person_id", referencedColumnName = "id")
     private Person owner;
 
-    @ManyToMany(mappedBy = "books", fetch =FetchType.EAGER)
+    @ManyToMany(mappedBy = "books",
+            fetch = FetchType.EAGER)
     private List<Author> authors;
 
     @Transient
