@@ -120,4 +120,17 @@ public class BooksService {
             System.out.println(a);
         }
     }
+
+    @Transactional
+    public void unlinkAllAuthors(int id) {
+        Optional<Book> book = findById(id);
+        if(book.isPresent()) {
+            List<Author> authors = book.get().getAuthors();
+            for (Author a: authors
+                 ) {
+                a.removeBook(book.get());
+            }
+        }
+
+    }
 }

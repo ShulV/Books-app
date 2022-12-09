@@ -1,6 +1,7 @@
 package org.app1.controllers;
 
 
+import org.app1.models.Author;
 import org.app1.models.Book;
 import org.app1.models.Person;
 import org.app1.services.AuthorsService;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -90,6 +92,7 @@ public class BooksController {
 
         Optional<Book> selectedBook = booksService.findById(id);
         if (selectedBook.isPresent()) {
+            model.addAttribute("authors", authorsService.getAllAuthors());
             model.addAttribute("book", selectedBook.get());
             return "/books/edit-book";
         }
@@ -102,8 +105,8 @@ public class BooksController {
                        BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "books/edit-book";
-
-        booksService.update(updatedBook, id);
+        booksService.unlinkAllAuthors(updatedBook.getId());
+        booksService.saveWithAuthorsIdString(updatedBook);
         return "redirect:/books/" + id;
     }
 
