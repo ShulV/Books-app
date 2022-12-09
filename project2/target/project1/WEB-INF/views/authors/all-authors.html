@@ -14,17 +14,18 @@
     </ul>
 </div>
 <!---->
-<h2>Страница со списком всех книг</h2>
-<div th:each="book : ${books}">
-    <a th:href="@{/books/{id}(id=${book.getId()})}">
-        <span th:text="${book.getName()}"></span>
-        <span th:text="${book.getYear()}"></span>
-        <ul th:each="author : ${book.getAuthors()}">
-            <li th:text="${author.getName()}"></li>
+<h2>Страница со списком всех авторов</h2>
+<div th:each="author : ${authors}">
+    <a th:href="@{/authors/{id}(id=${author.getId()})}">
+        <span th:text="${author.getName()}"></span>
+        <span th:text="${author.getBirthDate()}"></span>
+        <span th:text="${author.getDeathDate()}"></span>
+        <ul th:each="book : ${author.getBooks()}">
+            <li th:text="${book.getName()}"></li>
         </ul>
     </a>
 </div>
 <hr>
-<a href="/books/new">Добавить</a>
+<a href="/authors/new">Добавить</a>
 </body>
 </html>

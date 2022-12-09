@@ -34,7 +34,7 @@ public class Author {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate deathDate;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "authors_books",
             joinColumns = @JoinColumn(name = "author_id"),		//текущая сторона связи
