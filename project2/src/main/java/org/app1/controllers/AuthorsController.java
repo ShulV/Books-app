@@ -42,7 +42,10 @@ public class AuthorsController {
 
             model.addAttribute("author", author.get());
             List<Book> books = author.get().getBooks();
-            model.addAttribute("books", books);
+            if (!books.isEmpty()) {
+                model.addAttribute("books", books);
+            }
+
 
             return "authors/author";
         }

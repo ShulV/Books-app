@@ -5,6 +5,47 @@
     <title>Author</title>
 </head>
 <body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search">Поиск книг</a></li>
+        <li><a href="/authors/">Все авторы</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+    </ul>
+</div>
+<!---->
+<h2>Страница с информацией о книге</h2>
+<!---->
+<div>
+    ФИО/псевдоним:
+    <span th:text="${author.getName()}"></span>
+    Дата рождения:
+    <span th:text="${author.getBirthDate()}"></span>
+    <div th:if="${author.getDeathDate()}">
+    Дата смерти:
+    <span th:text="${author.getDeathDate()}"></span>
+    </div>
+<!--    -->
+    <div th:if="${books}">
+        <ul th:each="book: ${books}">
+            <li th:text="${book.getName()}"></li>
+        </ul>
+    </div>
+<!--    -->
+    <div th:unless="${books}">
+       Книг у автора нет.
+    </div>
+</div>
 
+<!---->
+<hr>
+<!---->
+<form th:method="GET" th:action="@{/authors/{id}/edit(id=${author.getId()})}">
+    <input type="submit" value="Редактировать"/>
+</form>
+<!---->
+<form th:method="DELETE" th:action="@{/authors/{id}(id=${author.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
 </body>
 </html>
