@@ -73,4 +73,36 @@ public class AuthorsController {
         authorsService.saveAuthor(author);
         return "redirect:/authors";
     }
+
+    //запрос на получение страницы изменения автора
+    @GetMapping("/{id}/edit")
+    public String editAuthorPage(@PathVariable int id, Model model) {
+
+        Optional<Author> selectedAuthor = authorsService.getAuthorById(id);
+        if (selectedAuthor.isPresent()) {
+            model.addAttribute("author", selectedAuthor.get());
+            return "/authors/edit-author";
+        }
+        return "redirect:/authors";
+    }
+
+
+    //запрос на редактирование данных автора
+    @Transactional
+    @PatchMapping("/{id}")
+    public String edit(@PathVariable int id, @ModelAttribute("author") @Valid Author updatedAuthor,
+                       BindingResult bindingResult) {
+        if (bindingResult.hasErrors())
+            return "authors/edit-author";
+        authorsService.updateAuthor(id, updatedAuthor);
+        return "redirect:/authors/" + id;
+    }
+
+    //запрос на удаление книги
+    @Transactional
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable int id) {
+        authorsService.deleteById(id);
+        return "redirect:/authors";
+    }
 }

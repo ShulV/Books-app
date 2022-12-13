@@ -9,8 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static org.app1.util.StringParser.parseStrNumSeqToList;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,4 +53,14 @@ public class AuthorsService {
     public void saveAuthor(Author author) {
         authorsRepository.save(author);
     }
+
+    public void deleteById(int id) {
+        authorsRepository.deleteById(id);
+    }
+
+    public void updateAuthor(int id, Author updatedAuthor) {
+        updatedAuthor.setId(id);
+        authorsRepository.save(updatedAuthor);
+    }
+
 }

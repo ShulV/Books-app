@@ -18,11 +18,13 @@
 <!---->
 <h2>Страница добавления книги</h2>
 <form th:method="post" th:action="@{/books}" th:object="${book}" class="form">
+<!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
   <div class="form__field">
     <label th:for="name">Введите название:</label>
     <input type="text" th:field="*{name}" id="name"/>
   </div>
+<!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('authorsIdString')}" th:errors="*{authorsIdString}">Authors Error</div>
   <div class="form__field">
     <label>Выберите человека: </label>
@@ -33,18 +35,13 @@
       </option>
     </select>
   </div>
-
-
-<!--  <div style="color:red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">Author Error</div>-->
-<!--  <div class="form__field">-->
-<!--    <label th:for="author">Введите автора:</label>-->
-<!--    <input type="text" th:field="*{author}" id="author"/>-->
-<!--  </div>-->
+<!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
   <div class="form__field">
     <label th:for="date">Выберите дату:</label>
     <input type="date" th:field="*{date}" id="date"/>
   </div>
+<!--  -->
   <input class="form__btn-submit" type="submit" value="Добавить"/>
 </form>
 </body>

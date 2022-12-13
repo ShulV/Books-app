@@ -48,9 +48,8 @@ public class BooksController {
         return "books/all-books";
     }
     //запрос на получение страницы с определенной книгой
-    @Transactional
     @GetMapping("/{id}")
-    public String bookPage(@PathVariable int id, Model model) {
+    public String bookPage(@PathVariable int id, Model model, @ModelAttribute("person") Person person) {
         Optional<Book> book = booksService.findById(id);
         if (book.isPresent()) {
 
@@ -76,6 +75,7 @@ public class BooksController {
         model.addAttribute("authors", authorsService.getAllAuthors());
         return "books/new-book";
     }
+
     //запрос на добавление новой книги
     @PostMapping()
     public String createBook(@ModelAttribute("book") @Valid Book book,
@@ -105,6 +105,7 @@ public class BooksController {
                        BindingResult bindingResult) {
         if (bindingResult.hasErrors())
             return "books/edit-book";
+
         booksService.unlinkAllAuthors(updatedBook.getId());
         booksService.saveWithAuthorsIdString(updatedBook);
         return "redirect:/books/" + id;

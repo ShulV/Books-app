@@ -110,14 +110,6 @@ public class BooksService {
             Author author = authorsService.getAuthorById(authorIdList[i]).get();
             author.addBook(book);
             authors.add(author);
-
-        }
-        Hibernate.initialize(book);
-
-        for (Author a: authors
-             ) {
-//            a.setDeathDate(LocalDate.parse("14-04-1233"));
-            System.out.println(a);
         }
     }
 
@@ -127,7 +119,7 @@ public class BooksService {
         if(book.isPresent()) {
             List<Author> authors = book.get().getAuthors();
             for (Author a: authors
-                 ) {
+            ) {
                 a.removeBook(book.get());
             }
         }

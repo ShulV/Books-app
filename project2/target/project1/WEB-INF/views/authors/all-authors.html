@@ -17,9 +17,14 @@
 <h2>Страница со списком всех авторов</h2>
 <div th:each="author : ${authors}">
     <a th:href="@{/authors/{id}(id=${author.getId()})}">
+        Имя:
         <span th:text="${author.getName()}"></span>
-        с <span th:text="${author.getBirthDate()}"></span>
-        по <span th:text="${author.getDeathDate()}"></span>
+        Дата рождения:
+        <span th:text="${author.getBirthDate()}"></span>
+        <div th:if="${author.getDeathDate()}">
+            Дата смерти:
+            <span th:text="${author.getDeathDate()}"></span>
+        </div>
         <ul th:each="book : ${author.getBooks()}">
             <li th:text="${book.getName()}"></li>
         </ul>
