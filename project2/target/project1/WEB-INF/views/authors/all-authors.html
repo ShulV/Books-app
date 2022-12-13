@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Book list</title>
+    <title>Author list</title>
 </head>
 <body>
 <div>
@@ -18,8 +18,8 @@
 <div th:each="author : ${authors}">
     <a th:href="@{/authors/{id}(id=${author.getId()})}">
         <span th:text="${author.getName()}"></span>
-        <span th:text="${author.getBirthDate()}"></span>
-        <span th:text="${author.getDeathDate()}"></span>
+        с <span th:text="${author.getBirthDate()}"></span>
+        по <span th:text="${author.getDeathDate()}"></span>
         <ul th:each="book : ${author.getBooks()}">
             <li th:text="${book.getName()}"></li>
         </ul>

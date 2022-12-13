@@ -42,4 +42,12 @@ public class AuthorsService {
         }
 //        authorsRepository.saveAll(authors);
     }
+
+    public Optional<Author> findById(int id) {
+        return authorsRepository.findById(id);
+    }
+
+    public void saveAuthor(Author author) {
+        authorsRepository.save(author);
+    }
 }

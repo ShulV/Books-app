@@ -5,7 +5,7 @@
     <title>Author adding form</title>
 </head>
 <body>
-<h2>Страница добавления автора</h2>
+<h2>Страница добавления книги</h2>
 <form th:method="post" th:action="@{/authors}" th:object="${author}" class="form">
     <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
     <div class="form__field">

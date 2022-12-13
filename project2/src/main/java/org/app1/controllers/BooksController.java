@@ -50,7 +50,7 @@ public class BooksController {
     //запрос на получение страницы с определенной книгой
     @Transactional
     @GetMapping("/{id}")
-    public String bookPage(@PathVariable int id, Model model, @ModelAttribute("person") Person person) {
+    public String bookPage(@PathVariable int id, Model model) {
         Optional<Book> book = booksService.findById(id);
         if (book.isPresent()) {
 
