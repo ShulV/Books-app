@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Author adding form</title>
+</head>
+<body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search/">Поиск книг</a></li>
+        <li><a href="/authors/">Все авторы</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+
+        <li><a href="/people/sign-in/">Войти</a></li>
+        <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
+    </ul>
+</div>
+<!---->
+<h2>Страница добавления автора</h2>
+<form th:method="post" th:action="@{/authors/}" th:object="${author}" class="form">
+    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <div class="form__field">
+        <label th:for="name">Введите ФИО/псевдоним:</label>
+        <input type="text" th:field="*{name}" id="name"/>
+    </div>
+<!--    -->
+    <div style="color:red" th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}">Birth date Error</div>
+    <div class="form__field">
+        <label th:for="birthDate">Выберите дату рождения</label>
+        <input type="date" th:field="*{birthDate}" id="birthDate"/>
+    </div>
+<!--    -->
+    <div>
+        <label for="author-death-checkbox">Автора нет в живых?</label>
+        <input type="checkbox" id="author-death-checkbox" name="author-death-checkbox">
+        <div class="" id="author-death-block" style="display: none">
+            <div style="color:red" th:if="${#fields.hasErrors('deathDate')}" th:errors="*{deathDate}">Death date Error</div>
+            <div class="form__field">
+                <label th:for="deathDate">Выберите дату смерти</label>
+                <input type="date" th:field="*{deathDate}" id="deathDate"/>
+            </div>
+        </div>
+    </div>
+<!--    -->
+    <input class="form__btn-submit" type="submit" value="Добавить"/>
+</form>
+
+<script>
+    let authorDeathCheckbox = document.getElementById('author-death-checkbox');
+    let authorDeathBlock = document.getElementById('author-death-block');
+    let deathDateInput = document.getElementById('deathDate');
+    authorDeathCheckbox.addEventListener('change', (e) => {
+
+        if (!authorDeathCheckbox.checked) {
+            authorDeathBlock.style.display = "none";//не показываем блок выбора даты смерти
+            deathDateInput.value = "";//очищаем дату смерти
+        } else {
+            authorDeathBlock.style.display = "block";//показываем блок выбора даты смерти
+        }
+    })
+</script>
+</body>
+</html>

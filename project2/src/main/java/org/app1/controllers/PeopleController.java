@@ -10,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.util.Optional;
 
@@ -53,6 +55,25 @@ public class PeopleController {
     @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new-person";
+    }
+
+    //запрос на получение страницы регистрации пользователя (читателя, библиотекаря или админа)
+    @GetMapping("/sign-up")
+    public String newUser(@ModelAttribute("person") Person person) {
+
+        return "sign/sign-up";
+    }
+
+    //запрос на регистрацию пользователя
+    @PostMapping("/sign-up")
+    public String createUser(@ModelAttribute("person") @Valid Person person,
+                         BindingResult bindingResult) {
+        personValidator.validate(person, bindingResult);
+        if (bindingResult.hasErrors())
+            return "sign/sign-up";
+
+        peopleService.save(person);
+        return "redirect:/people";
     }
 
     //запрос на добавление человека

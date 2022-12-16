@@ -28,9 +28,17 @@ public class PersonValidator implements Validator {
     public void validate(Object o, Errors errors) {
         Person person = (Person) o;
 
-        boolean isExistingId = peopleService.getPersonById(person.getId()).isPresent();
+        boolean isExistingLogin = peopleService.getPersonByLogin(person.getLogin()).isPresent();
 
+        if(isExistingLogin) {
+            // поле, код ошибки, сообщение ошибки
+            errors.rejectValue("login", "", "Логин уже существует");
+
+        }
+
+        boolean isExistingId = peopleService.getPersonById(person.getId()).isPresent();
         boolean isExistingEmail = peopleService.getPersonByEmail(person.getEmail()).isPresent();
+
         if (!isExistingId && isExistingEmail) {
             // поле, код ошибки, сообщение ошибки
             errors.rejectValue("email", "", "Этот email уже используется");

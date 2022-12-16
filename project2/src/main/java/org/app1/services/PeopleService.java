@@ -43,6 +43,9 @@ public class PeopleService {
         return peopleRepository.findByEmail(email);
     }
 
+    public Optional<Object> getPersonByLogin(String login) {
+        return peopleRepository.findByLogin(login);
+    }
     public List<Book> getBooksByPerson(int id) {
         Optional<Person> person = peopleRepository.findById(id);
         if(person.isPresent()) {
@@ -62,6 +65,5 @@ public class PeopleService {
         updatedPerson.setId(id);
         peopleRepository.save(updatedPerson);
     }
-
 
 }

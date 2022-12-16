@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+</head>
+<body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search/">Поиск книг</a></li>
+        <li><a href="/authors/">Все авторы</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+
+        <li><a href="/people/sign-in/">Войти</a></li>
+        <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
+    </ul>
+</div>
+<!---->
+<h2>Страница поиска книги</h2>
+<form th:method="post" th:action="@{/books/search/}" class="form">
+    <label th:for="query">Введите поисковой запрос:</label>
+    <input type="text" id="query" name="query"/>
+    <input class="form__btn-submit" type="submit" value="Поиск"/>
+</form>
+
+<div th:if="${books}">
+    <div th:if="${books.isEmpty()}">Книг нет</div>
+    <div th:each="book : ${books}">
+        <a th:href="@{/books/{id}/(id=${book.getId()})}">
+            <span th:text="${book.getName()}"></span>,
+<!--            <span th:text="${book.getAuthor()}"></span>,-->
+            <span th:text="${book.getYear()}"></span>
+        </a>
+
+        <div th:if="${book.getOwner() != null}">
+            <span>Книга сейчас у: </span> <span th:text="${book.getOwner().getFullName()}">Person Name</span>
+        </div>
+
+        <div th:if="${book.getOwner() == null}">
+            <span>Книга свободна</span>
+        </div>
+    </div>
+</div>
+<!---->
+
+</body>
+</html>

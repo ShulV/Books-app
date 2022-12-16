@@ -49,19 +49,39 @@ public class Person {
     @Email(message = "Email должен быть валидным")
     private String email;
 
+    @Column(name = "login")
+    @NotNull(message = "Логин не должен быть пустой")
+    @Size(min = 6, max = 50, message = "Длина логина должна быть от 6 до 50 символов")
+    private String login;
+
+    @Column(name = "pass_hash")
+    @NotNull(message = "Пароль не должен быть пустой")
+    @Size(min = 6, max = 50, message = "Длина пароля должна быть от 6 до 50 символов")
+
+    private String passHash;
+
+//    @Transient
+//    @NotNull(message = "Пароль не должен быть пустой")
+//    @Size(min = 6, max = 50, message = "Длина пароля должна быть от 6 до 50 символов")
+//    private String password;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
     private List<Book> books;
 
     public Person() {
     }
 
-    public Person(int id, String name, String patronymic, String surname, LocalDate birthday, String email) {
+    public Person(int id, String name, String patronymic, String surname,
+                  LocalDate birthday, String email,
+                  String login, String passHash) {
         this.id = id;
         this.name = name;
         this.patronymic = patronymic;
         this.surname = surname;
         this.birthday = birthday;
         this.email = email;
+        this.login = login;
+        this.passHash = passHash;
     }
 
     public String getName() {
@@ -118,6 +138,22 @@ public class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPassHash() {
+        return passHash;
+    }
+
+    public void setPassHash(String passHash) {
+        this.passHash = passHash;
     }
 
     public List<Book> getBooks() {

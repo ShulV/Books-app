@@ -11,6 +11,9 @@
         <li><a href="/books/search">Поиск книг</a></li>
         <li><a href="/authors/">Все авторы</a></li>
         <li><a href="/people/">Все читатели</a></li>
+
+        <li><a href="/people/sign-in">Войти</a></li>
+        <li><a href="/people/sign-up">Зарегистрироваться</a></li>
     </ul>
 </div>
 <!---->
@@ -18,9 +21,9 @@
 <div th:each="author : ${authors}">
     <a th:href="@{/authors/{id}(id=${author.getId()})}">
         Имя:
-        <span th:text="${author.getName()}"></span>
+        <div th:text="${author.getName()}"></div>
         Дата рождения:
-        <span th:text="${author.getBirthDate()}"></span>
+        <div th:text="${author.getBirthDate()}"></div>
         <div th:if="${author.getDeathDate()}">
             Дата смерти:
             <span th:text="${author.getDeathDate()}"></span>

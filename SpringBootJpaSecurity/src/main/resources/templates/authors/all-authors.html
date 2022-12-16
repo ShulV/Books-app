@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Author list</title>
+</head>
+<body>
+<div>
+    <ul>
+        <li><a href="/books/">Все книги</a></li>
+        <li><a href="/books/search/">Поиск книг</a></li>
+        <li><a href="/authors/">Все авторы</a></li>
+        <li><a href="/people/">Все читатели</a></li>
+
+        <li><a href="/people/sign-in/">Войти</a></li>
+        <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
+    </ul>
+</div>
+<!---->
+<h2>Страница со списком всех авторов</h2>
+<div th:each="author : ${authors}">
+    <a th:href="@{/authors/{id}/(id=${author.getId()})}">
+        Имя:
+        <div th:text="${author.getName()}"></div>
+        Дата рождения:
+        <div th:text="${author.getBirthDate()}"></div>
+        <div th:if="${author.getDeathDate()}">
+            Дата смерти:
+            <span th:text="${author.getDeathDate()}"></span>
+        </div>
+        <ul th:each="book : ${author.getBooks()}">
+            <li th:text="${book.getName()}"></li>
+        </ul>
+    </a>
+</div>
+<hr>
+<a href="/authors/new/">Добавить</a>
+</body>
+</html>

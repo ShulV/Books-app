@@ -34,7 +34,7 @@
         <div class="" id="author-death-block" style="display: none">
             <div style="color:red" th:if="${#fields.hasErrors('deathDate')}" th:errors="*{deathDate}">Death date Error</div>
             <div class="form__field">
-                <label th:for="deathDate">Выберите дату рождения</label>
+                <label th:for="deathDate">Выберите дату смерти</label>
                 <input type="date" th:field="*{deathDate}" id="deathDate"/>
             </div>
         </div>

@@ -119,6 +119,14 @@
       <version>2.4.7</version>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc -->
+    <dependency>
+      <groupId>org.springframework.session</groupId>
+      <artifactId>spring-session-jdbc</artifactId>
+      <version>3.0.0</version>
+    </dependency>
+
+
   </dependencies>
 
 
