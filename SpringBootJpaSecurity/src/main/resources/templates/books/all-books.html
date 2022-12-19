@@ -20,7 +20,7 @@
 <h2>Страница со списком всех книг</h2>
 <div th:each="book : ${books}">
     <a th:href="@{/books/{id}/(id=${book.getId()})}">
-        <span th:text="${book.getName()}"></span>
+        <span th:text="${book.getName()}" th:style="${book.isOverdue()} ? 'color: red' : 'color: black' "></span>
         <span th:text="${book.getYear()}"></span>
         <ul th:each="author : ${book.getAuthors()}">
             <li th:text="${author.getName()}"></li>

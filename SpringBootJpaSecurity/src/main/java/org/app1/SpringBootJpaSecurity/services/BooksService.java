@@ -11,6 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Date;
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -34,10 +37,15 @@ public class BooksService {
     }
 
     public List<Book> findAll(boolean sort_by_year) {
+        List<Book> books = new ArrayList<>();
         if (sort_by_year) {
-            return booksRepository.findAll(Sort.by("date"));
+            books = booksRepository.findAll(Sort.by("date"));
         }
-        return bookDAO.getBooksWithAuthors();
+        else {
+            books = bookDAO.getBooksWithAuthors();
+        }
+        markOverdueBooks(books);
+        return books;
     }
 
     public List<Book> findWithPagination(Integer page, Integer booksPerPage, boolean sort_by_year) {
@@ -60,8 +68,12 @@ public class BooksService {
 
     @Transactional
     public void update(Book updatedBook, int id) {
-        updatedBook.setId(id);
-        booksRepository.save(updatedBook);
+        Optional<Book> book = booksRepository.findById(id);
+        if(book.isPresent()) {
+            updatedBook.setDateTime(book.get().getDateTime());
+            updatedBook.setId(id);
+            booksRepository.save(updatedBook);
+        }
     }
 
     @Transactional
@@ -84,6 +96,7 @@ public class BooksService {
     public void assign(int id, Person selectedPerson) {
         findById(id).ifPresent(book -> {
             book.setOwner(selectedPerson);
+            book.setDateTime(new Timestamp(System.currentTimeMillis()));
         });
     }
 
@@ -91,6 +104,7 @@ public class BooksService {
     public void release(int id) {
         findById(id).ifPresent(book -> {
             book.setOwner(null);
+            book.setDateTime(null);
         });
     }
 
@@ -125,5 +139,20 @@ public class BooksService {
             }
         }
 
+    }
+
+    public void markOverdueBooks(List<Book> books) {
+        for (Book b: books
+             ) {
+            if (b.getOwner() != null) {
+                Timestamp timeNow = new Timestamp(System.currentTimeMillis());
+                Timestamp bookAssignTime = b.getDateTime();
+                Long timeDiff = timeNow.getTime() - bookAssignTime.getTime();
+                //TODO вынести константу в properties
+                if(timeDiff > 864000000) {
+                    b.setOverdue(true);
+                }
+            }
+        }
     }
 }

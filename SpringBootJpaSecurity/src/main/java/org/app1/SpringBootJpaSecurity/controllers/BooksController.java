@@ -14,6 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -37,11 +40,13 @@ public class BooksController {
                                @RequestParam(name = "page", required = false) Integer page,
                                @RequestParam(name = "books_per_page", required = false) Integer booksPerPage,
                                @RequestParam(name = "sort_by_date", required = false) boolean sortByDate) {
-
+        List<Book> books = new ArrayList<>();
         if (page == null || booksPerPage == null)
-            model.addAttribute("books", booksService.findAll(sortByDate));
+            books = booksService.findAll(sortByDate);
+
         else
-            model.addAttribute("books", booksService.findWithPagination(page, booksPerPage, sortByDate));
+            books = booksService.findWithPagination(page, booksPerPage, sortByDate);
+        model.addAttribute("books", books);
         return "books/all-books";
     }
     //запрос на получение страницы с определенной книгой
@@ -115,12 +120,14 @@ public class BooksController {
         return "redirect:/books/";
     }
 
+    //присваивание книги
     @PatchMapping("/{id}/assign/")
     public String assign(@PathVariable int id, @ModelAttribute("person") Person selectedPerson) {
         booksService.assign(id, selectedPerson);
         return "redirect:/books/" + id + '/';
     }
 
+    //возврат книги
     @PatchMapping("/{id}/release/")
     public String release(@PathVariable int id) {
         booksService.release(id);

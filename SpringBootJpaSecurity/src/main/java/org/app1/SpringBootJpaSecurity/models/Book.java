@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -24,16 +25,16 @@ public class Book {
     @Size(min = 2, max = 50, message = "Название должно быть от 2 до 50 символов")
     private String name;
 
-//    @Column(name = "author")
-//    @NotEmpty(message = "Поле автор не должно быть пустым")
-//    @Size(min = 2, max = 100, message = "Поле автор должно быть от 2 до 100 символов")
-//    private String author;
-
     @Column(name = "date")
     @NotNull(message = "Дата не должна быть пустой")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate date;
+
+    @Column(name = "taking_time")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Timestamp dateTime;
 
 //    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
     @ManyToOne
@@ -46,6 +47,9 @@ public class Book {
 
     @Transient
     private String authorsIdString; //for form
+
+    @Transient
+    private boolean isOverdue; //просрочено
 
     public Book(int id, String name, LocalDate date) {
         this.id = id;
@@ -115,6 +119,22 @@ public class Book {
 
     public void setAuthorsIdString(String authorsIdString) {
         this.authorsIdString = authorsIdString;
+    }
+
+    public Timestamp getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(Timestamp dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public boolean isOverdue() {
+        return isOverdue;
+    }
+
+    public void setOverdue(boolean overdue) {
+        isOverdue = overdue;
     }
 
     @Override
