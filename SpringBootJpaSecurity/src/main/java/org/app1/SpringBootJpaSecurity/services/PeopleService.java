@@ -5,8 +5,12 @@ import org.app1.SpringBootJpaSecurity.models.Book;
 import org.app1.SpringBootJpaSecurity.models.Person;
 import org.app1.SpringBootJpaSecurity.repositories.BooksRepository;
 import org.app1.SpringBootJpaSecurity.repositories.PeopleRepository;
+import org.app1.SpringBootJpaSecurity.security.PersonDetails;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +20,7 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 @Service
-public class PeopleService {
+public class PeopleService implements UserDetailsService {
 
     private final PeopleRepository peopleRepository;
     private final BooksRepository booksRepository;
@@ -44,7 +48,7 @@ public class PeopleService {
         return peopleRepository.findByEmail(email);
     }
 
-    public Optional<Object> getPersonByLogin(String login) {
+    public Optional<Person> getPersonByLogin(String login) {
         return peopleRepository.findByLogin(login);
     }
     public List<Book> getBooksByPerson(int id) {
@@ -67,4 +71,13 @@ public class PeopleService {
         peopleRepository.save(updatedPerson);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+        Optional<Person> person = peopleRepository.findByLogin(s);
+
+        if (person.isEmpty())
+            throw new UsernameNotFoundException("User not found!");
+
+        return new PersonDetails(person.get());
+    }
 }
