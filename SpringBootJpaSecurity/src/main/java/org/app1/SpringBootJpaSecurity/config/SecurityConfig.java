@@ -7,22 +7,23 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfiguration {
+public class SecurityConfig{
 
-    private final AuthProviderImpl authProvider;
-
-
-//    TODO горит красным, но работает (непонятно, autowar'ится ли)
-
-    @Autowired
-    public SecurityConfig(AuthProviderImpl authProvider) {
-        this.authProvider = authProvider;
-    }
+//    private final AuthProviderImpl authProvider;
+//
+//
+////    TODO горит красным, но работает (непонятно, autowar'ится ли)
+//
+//    @Autowired
+//    public SecurityConfig(AuthProviderImpl authProvider) {
+//        this.authProvider = authProvider;
+//    }
 
 
     // Настраивает аутентификацию
-    protected void configure(AuthenticationManagerBuilder auth) {
-        auth.authenticationProvider(authProvider);
-    }
+
+//    protected void configure(AuthenticationManagerBuilder auth) {
+//        auth.authenticationProvider(authProvider);
+//    }
 }
 
