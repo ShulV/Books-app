@@ -1,7 +1,5 @@
 package org.app1.SpringBootJpaSecurity.controllers;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import org.app1.SpringBootJpaSecurity.models.Author;
 import org.app1.SpringBootJpaSecurity.models.Book;
 import org.app1.SpringBootJpaSecurity.services.AuthorsService;
@@ -12,6 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Optional;
 

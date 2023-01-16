@@ -1,9 +1,6 @@
 package org.app1.SpringBootJpaSecurity.dao;
 
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.validation.constraints.NotNull;
 import org.app1.SpringBootJpaSecurity.models.Author;
 import org.app1.SpringBootJpaSecurity.models.Book;
 import org.hibernate.Session;
@@ -12,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
@@ -20,6 +20,7 @@ public class AuthorDAO {
     @PersistenceContext
     private final EntityManager entityManager;
 
+    @Autowired
     public AuthorDAO(EntityManager entityManager){
         this.entityManager = entityManager;
     }

@@ -1,12 +1,13 @@
 package org.app1.SpringBootJpaSecurity.util;
 
-import jakarta.validation.constraints.NotNull;
 import org.app1.SpringBootJpaSecurity.models.Person;
 import org.app1.SpringBootJpaSecurity.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+
+import javax.validation.constraints.NotNull;
 
 @Component
 public class PersonValidator implements Validator {

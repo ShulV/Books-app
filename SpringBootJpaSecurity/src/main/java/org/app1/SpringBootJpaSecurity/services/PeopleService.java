@@ -5,7 +5,6 @@ import org.app1.SpringBootJpaSecurity.models.Book;
 import org.app1.SpringBootJpaSecurity.models.Person;
 import org.app1.SpringBootJpaSecurity.repositories.BooksRepository;
 import org.app1.SpringBootJpaSecurity.repositories.PeopleRepository;
-import org.app1.SpringBootJpaSecurity.security.PersonDetails;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,7 @@ import java.util.Optional;
 
 @Transactional(readOnly = true)
 @Service
-public class PeopleService implements UserDetailsService {
+public class PeopleService {
 
     private final PeopleRepository peopleRepository;
     private final BooksRepository booksRepository;
@@ -71,13 +70,4 @@ public class PeopleService implements UserDetailsService {
         peopleRepository.save(updatedPerson);
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        Optional<Person> person = peopleRepository.findByLogin(s);
-
-        if (person.isEmpty())
-            throw new UsernameNotFoundException("User not found!");
-
-        return new PersonDetails(person.get());
-    }
 }

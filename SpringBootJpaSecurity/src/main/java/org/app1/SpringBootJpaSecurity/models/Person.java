@@ -2,13 +2,13 @@ package org.app1.SpringBootJpaSecurity.models;
 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -48,12 +48,12 @@ public class Person {
 
     @Column(name = "login")
     @NotNull(message = "Логин не должен быть пустой")
-    @Size(min = 6, max = 50, message = "Длина логина должна быть от 6 до 50 символов")
+    @Size(min = 3, max = 50, message = "Длина логина должна быть от 3 до 50 символов")
     private String login;
 
     @Column(name = "pass_hash")
     @NotNull(message = "Пароль не должен быть пустой")
-    @Size(min = 6, max = 50, message = "Длина пароля должна быть от 6 до 50 символов")
+    @Size(min = 6, max = 256, message = "Длина пароля должна быть от 6 до 256 символов")
 
     private String passHash;
 

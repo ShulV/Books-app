@@ -1,12 +1,12 @@
 package org.app1.SpringBootJpaSecurity.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.List;
@@ -33,7 +33,7 @@ public class Book {
 
     @Column(name = "taking_time")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    @Temporal(TemporalType.TIMESTAMP)
+//    @Temporal(TemporalType.TIMESTAMP)
     private Timestamp dateTime;
 
 //    @Cascade(org.hibernate.annotations.CascadeType.SAVE_UPDATE)
