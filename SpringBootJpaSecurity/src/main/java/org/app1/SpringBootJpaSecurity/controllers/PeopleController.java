@@ -60,7 +60,7 @@ public class PeopleController {
     @GetMapping("/sign-up/")
     public String newUser(@ModelAttribute("person") Person person) {
 
-        return "sign/sign-up";
+        return "registration";
     }
 
     //запрос на регистрацию пользователя
@@ -69,7 +69,7 @@ public class PeopleController {
                          BindingResult bindingResult) {
         personValidator.validate(person, bindingResult);
         if (bindingResult.hasErrors())
-            return "sign/sign-up";
+            return "registration";
 
         peopleService.save(person);
         return "redirect:/people/";

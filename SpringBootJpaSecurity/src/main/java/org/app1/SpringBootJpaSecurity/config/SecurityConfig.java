@@ -28,7 +28,7 @@ public class SecurityConfig {
                 .csrf().disable()
                 .authorizeRequests()
                 //пускать неаутентифицир. пользователя на эти страницы
-                .antMatchers("/auth/login", "/error").permitAll()
+                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
                 //                        .mvcMatchers("/people/**").permitAll()
                 //для всех остальных запросов пользователь должен быть аутентифицирован
                 .anyRequest().authenticated()
@@ -39,7 +39,9 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/books/", true)
                 .failureUrl("/auth/login?error")
                 .and()
-
+                //разлогирование
+                .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login")
+                .and()
                 .userDetailsService(JpaUserDetailsService)
                 .build();
     }

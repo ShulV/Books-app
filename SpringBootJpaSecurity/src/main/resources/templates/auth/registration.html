@@ -20,7 +20,7 @@
 </div>
 <!---->
 <h2>Страница регистрации пользователя</h2>
-<form th:method="POST" th:action="@{/people/sign-up/}" th:object="${person}" class="form">
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${person}" class="form">
   <!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
   <div class="form__field">
@@ -28,10 +28,10 @@
     <input type="text" th:field="*{login}" id="login"/>
   </div>
   <!--  -->
-  <div style="color:red" th:if="${#fields.hasErrors('passHash')}" th:errors="*{passHash}">Password Error</div>
+  <div style="color:red" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password Error</div>
   <div class="form__field">
-    <label th:for="passHash">Введите пароль:</label>
-    <input type="password" th:field="*{passHash}" id="passHash"/>
+    <label th:for="password">Введите пароль:</label>
+    <input type="password" th:field="*{password}" id="password"/>
   </div>
 <!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>

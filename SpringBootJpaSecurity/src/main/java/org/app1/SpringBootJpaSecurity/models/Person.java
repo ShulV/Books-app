@@ -51,8 +51,12 @@ public class Person {
     @Size(min = 3, max = 50, message = "Длина логина должна быть от 3 до 50 символов")
     private String login;
 
-    @Column(name = "pass_hash")
+    @Transient
     @NotNull(message = "Пароль не должен быть пустой")
+    private String password;
+
+
+    @Column(name = "pass_hash")
     @Size(min = 6, max = 256, message = "Длина пароля должна быть от 6 до 256 символов")
 
     private String passHash;
@@ -159,5 +163,25 @@ public class Person {
 
     public void setBooks(List<Book> books) {
         this.books = books;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "surname='" + surname + '\'' +
+                ", birthday=" + birthday +
+                ", email='" + email + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", passHash='" + passHash + '\'' +
+                '}';
     }
 }
