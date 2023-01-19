@@ -61,6 +61,9 @@ public class Person {
 
     private String passHash;
 
+    @Column(name = "role")
+    private String role;
+
 //    @Transient
 //    @NotNull(message = "Пароль не должен быть пустой")
 //    @Size(min = 6, max = 50, message = "Длина пароля должна быть от 6 до 50 символов")
@@ -68,6 +71,9 @@ public class Person {
 
     @OneToMany(mappedBy = "owner", cascade = CascadeType.PERSIST)
     private List<Book> books;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
+    private List<PersonImage> personImages;
 
     public Person() {
     }
@@ -171,6 +177,22 @@ public class Person {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<PersonImage> getPersonImages() {
+        return personImages;
+    }
+
+    public void setPersonImages(List<PersonImage> personImages) {
+        this.personImages = personImages;
+    }
+
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
     }
 
     @Override

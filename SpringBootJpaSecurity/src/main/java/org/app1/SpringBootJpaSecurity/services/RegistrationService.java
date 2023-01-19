@@ -22,10 +22,9 @@ public class RegistrationService {
 
     @Transactional
     public void register(Person person) {
-
         String encodedPassword = passwordEncoder.encode(person.getPassword());
         person.setPassHash(encodedPassword);
-        System.out.println(person);
+        person.setRole("ROLE_USER");
         peopleRepository.save(person);
     }
 }

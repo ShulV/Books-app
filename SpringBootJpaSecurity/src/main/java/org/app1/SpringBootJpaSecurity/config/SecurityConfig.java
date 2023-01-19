@@ -9,29 +9,32 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JpaUserDetailsService JpaUserDetailsService;
+    private final JpaUserDetailsService jpaUserDetailsService;
 
-    public SecurityConfig(JpaUserDetailsService myUserDetailsService) {
-        this.JpaUserDetailsService = myUserDetailsService;
+    public SecurityConfig(JpaUserDetailsService jpaUserDetailsService) {
+        this.jpaUserDetailsService = jpaUserDetailsService;
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                //                .csrf(csrf -> csrf.ignoringAntMatchers("/h2-console/**"))
-                .csrf().disable()
+                //TODO csrf ничего не делает
+                .csrf()
+                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                .and()
+
                 .authorizeRequests()
                 //пускать неаутентифицир. пользователя на эти страницы
+                .antMatchers("/people/**").hasRole("ADMIN")
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-                //                        .mvcMatchers("/people/**").permitAll()
-                //для всех остальных запросов пользователь должен быть аутентифицирован
-                .anyRequest().authenticated()
+                .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()
                 //кастомная форма аутентификации
                 .formLogin().loginPage("/auth/login")
@@ -42,7 +45,7 @@ public class SecurityConfig {
                 //разлогирование
                 .logout().logoutUrl("/logout").logoutSuccessUrl("/auth/login")
                 .and()
-                .userDetailsService(JpaUserDetailsService)
+                .userDetailsService(jpaUserDetailsService)
                 .build();
     }
 

@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public class SecurityUser implements UserDetails {
     private final Person user;
@@ -26,12 +27,7 @@ public class SecurityUser implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-//        return Arrays.stream(user
-//                        .getRoles()
-//                        .split(","))
-//                .map(SimpleGrantedAuthority::new)
-//                .toList();
+        return Collections.singletonList(new SimpleGrantedAuthority(user.getRole()));
     }
 
     @Override

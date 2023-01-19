@@ -20,7 +20,7 @@
 </div>
 <!---->
 <h2>Страница регистрации пользователя</h2>
-<form th:method="POST" th:action="@{/auth/registration}" th:object="${person}" class="form">
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${person}" class="form" enctype="multipart/form-data">
   <!--  -->
   <div style="color:red" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
   <div class="form__field">
@@ -63,6 +63,12 @@
     <label th:for="email">Введите email:</label>
     <input type="text" th:field="*{email}" id="email"/>
   </div>
+
+  <div class="form__field">
+    <label for="file">File to upload: </label>
+    <input type="file" id="file" name="file"/>
+  </div>
+
   <input class="form__btn-submit" type="submit" value="Добавить"/>
 </form>
 </body>
