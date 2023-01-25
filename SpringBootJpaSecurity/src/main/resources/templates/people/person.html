@@ -23,6 +23,7 @@
   <span th:text="${person.getFullName()}"></span>,
   <span th:text="${person.getBirthdayYear()}"></span>,
   <span th:text="${person.getEmail()}"></span>
+  <img th:src="@{/person-storage/{key}(key=${person.getLastPersonImage().getKey()})}">
 </div>
 <hr>
 <!---->

@@ -25,14 +25,9 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                //TODO csrf ничего не делает
-                .csrf()
-                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
-                .and()
-
                 .authorizeRequests()
                 //пускать неаутентифицир. пользователя на эти страницы
-                .antMatchers("/people/**").hasRole("ADMIN")
+//                .antMatchers("/people/**").hasRole("ADMIN")
                 .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
                 .anyRequest().hasAnyRole("USER", "ADMIN")
                 .and()

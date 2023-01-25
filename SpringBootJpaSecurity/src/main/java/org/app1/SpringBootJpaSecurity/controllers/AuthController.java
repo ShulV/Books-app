@@ -1,7 +1,7 @@
 package org.app1.SpringBootJpaSecurity.controllers;
 
 import org.app1.SpringBootJpaSecurity.models.Person;
-import org.app1.SpringBootJpaSecurity.services.PersonImageService;
+import org.app1.SpringBootJpaSecurity.services.ImagesService;
 import org.app1.SpringBootJpaSecurity.services.RegistrationService;
 import org.app1.SpringBootJpaSecurity.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +20,13 @@ public class AuthController {
     private final PersonValidator personValidator;
     private final RegistrationService registrationService;
 
-    private final PersonImageService personImageService;
+    private final ImagesService imagesService;
 
     @Autowired
-    public AuthController(PersonValidator personValidator, RegistrationService registrationService, PersonImageService personImageService) {
+    public AuthController(PersonValidator personValidator, RegistrationService registrationService, ImagesService imagesService) {
         this.personValidator = personValidator;
         this.registrationService = registrationService;
-        this.personImageService = personImageService;
+        this.imagesService = imagesService;
     }
 
     @GetMapping("/login")
@@ -49,7 +49,7 @@ public class AuthController {
         }
 
         registrationService.register(person);
-        personImageService.addImage(file, person);
+        imagesService.upload(file, person);
         return "redirect:/auth/login";
     }
 }

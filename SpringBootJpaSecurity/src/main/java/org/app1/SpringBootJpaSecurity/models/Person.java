@@ -73,7 +73,7 @@ public class Person {
     private List<Book> books;
 
     @OneToMany(mappedBy = "person", cascade = CascadeType.PERSIST)
-    private List<PersonImage> personImages;
+    private List<PersonImageInfo> personImageInfos;
 
     public Person() {
     }
@@ -179,12 +179,20 @@ public class Person {
         this.password = password;
     }
 
-    public List<PersonImage> getPersonImages() {
-        return personImages;
+    public List<PersonImageInfo> getPersonImages() {
+        return personImageInfos;
     }
 
-    public void setPersonImages(List<PersonImage> personImages) {
-        this.personImages = personImages;
+    public PersonImageInfo getLastPersonImage() {
+        if (personImageInfos.isEmpty()) {
+            return null;
+        } else {
+            return personImageInfos.get(personImageInfos.size() - 1);
+        }
+    }
+
+    public void setPersonImages(List<PersonImageInfo> personImageInfos) {
+        this.personImageInfos = personImageInfos;
     }
 
     public String getRole() {
