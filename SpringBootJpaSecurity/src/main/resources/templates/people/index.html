@@ -1,31 +1,98 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <meta charset="UTF-8">
     <title>Person list</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+
+
 </head>
 <body>
-<div>
+<!---->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">BOOK-HUB</a>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Link</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Disabled</a>
+            </li>
+        </ul>
+        <div class="flex-center">
+            <div th:if="${user == null}">
+                <a href="/auth/login" class="btn btn-outline-primary btn-sm">Вход</a>
+                <a href="/auth/registration" class="btn btn-primary btn-sm">Регистрация</a>
+            </div>
+            <div th:if="${user != null}" class="flex-center">
+                <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+                     class="avatar-img">
+
+                <form th:method="post" th:action="${'/logout'}">
+                    <input type="submit" th:value="Выйти" class="btn btn-link">
+                </form>
+                <span th:text="${user.getName()}"></span>
+                <span th:text="${user.getSurname()}"></span>
+            </div>
+
+        </div>
+    </div>
+</nav>
+<!---->
+<nav class="container">
     <ul>
         <li><a href="/books/">Все книги</a></li>
         <li><a href="/books/search/">Поиск книг</a></li>
         <li><a href="/authors/">Все авторы</a></li>
         <li><a href="/people/">Все читатели</a></li>
 
-        <li><a href="/people/sign-in/">Войти</a></li>
-        <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
+        <li><a href="/auth/login">Войти</a></li>
+        <li><a href="/auth/registration">Зарегистрироваться</a></li>
     </ul>
-</div>
+</nav>
 <!---->
-<h2>Страница со списком всех людей</h2>
-<div th:each="person : ${people}">
-    <a th:href="@{/people/{id}/(id=${person.getId()})}">
-        <span th:text="${person.getFullName()}"></span>,
-        <span th:text="${person.getBirthdayYear()}"></span>,
-        <span th:text="${person.getEmail()}"></span>
-    </a>
-</div>
-<hr>
-<a href="/people/new/">Добавить</a>
+<main class="container">
+    <h2>Страница со списком всех людей</h2>
+    <div th:each="person : ${people}">
+        <a th:href="@{/people/{id}/(id=${person.getId()})}">
+            <span th:text="${person.getFullName()}"></span>,
+            <span th:text="${person.getBirthdayYear()}"></span>,
+            <span th:text="${person.getEmail()}"></span>
+        </a>
+    </div>
+    <a href="/people/new/">Добавить</a>
+</main>
+
+<!--
+Note: Popover content is read from "data-content" and "title" tags.
+-->
+<button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom">
+    Bottom popover
+</button>
+
+<!---->
+
+<script src="/js/jquery.min.js"></script>
+<script src="/js/popper.min.js"></script>
+<script src="/js/bootstrap.js"></script>
+<script src="/js/user-popover.js"></script>
 </body>
 </html>

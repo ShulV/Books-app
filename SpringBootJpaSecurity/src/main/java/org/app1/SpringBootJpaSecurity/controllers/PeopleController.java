@@ -2,6 +2,7 @@ package org.app1.SpringBootJpaSecurity.controllers;
 
 
 import org.app1.SpringBootJpaSecurity.models.Person;
+import org.app1.SpringBootJpaSecurity.services.JpaUserDetailsService;
 import org.app1.SpringBootJpaSecurity.services.PeopleService;
 import org.app1.SpringBootJpaSecurity.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +24,21 @@ public class PeopleController {
 
     private final PersonValidator personValidator;
 
+    private final JpaUserDetailsService jpaUserDetailsService;
+
     @Autowired
-    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator, JpaUserDetailsService jpaUserDetailsService) {
         this.peopleService = peopleService;
         this.personValidator = personValidator;
+        this.jpaUserDetailsService = jpaUserDetailsService;
     }
 
     //запрос на получение страницы со списком всех людей
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("people", peopleService.getAllPeople());
+        Optional<Person> person = jpaUserDetailsService.getAuthenticatedUser();
+        person.ifPresent(value -> model.addAttribute("user", value));
         return "people/index";
     }
 
@@ -56,24 +62,24 @@ public class PeopleController {
         return "people/new-person";
     }
 
-    //запрос на получение страницы регистрации пользователя (читателя, библиотекаря или админа)
-    @GetMapping("/sign-up/")
-    public String newUser(@ModelAttribute("person") Person person) {
-
-        return "registration";
-    }
-
-    //запрос на регистрацию пользователя
-    @PostMapping("/sign-up/")
-    public String createUser(@ModelAttribute("person") @Valid Person person,
-                         BindingResult bindingResult) {
-        personValidator.validate(person, bindingResult);
-        if (bindingResult.hasErrors())
-            return "registration";
-
-        peopleService.save(person);
-        return "redirect:/people/";
-    }
+//    //запрос на получение страницы регистрации пользователя (читателя, библиотекаря или админа)
+//    @GetMapping("/sign-up/")
+//    public String newUser(@ModelAttribute("person") Person person) {
+//
+//        return "registration";
+//    }
+//
+//    //запрос на регистрацию пользователя
+//    @PostMapping("/sign-up/")
+//    public String createUser(@ModelAttribute("person") @Valid Person person,
+//                         BindingResult bindingResult) {
+//        personValidator.validate(person, bindingResult);
+//        if (bindingResult.hasErrors())
+//            return "registration";
+//
+//        peopleService.save(person);
+//        return "redirect:/people/";
+//    }
 
     //запрос на добавление человека
     @PostMapping()
