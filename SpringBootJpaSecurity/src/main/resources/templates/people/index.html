@@ -8,6 +8,12 @@
 
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/style.css">
+    <!---->
+    <script src="/js/jquery.min.js" defer></script>
+    <script src="/js/popper.min.js" defer></script>
+    <script src="/js/bootstrap.js" defer></script>
+    <script src="/js/user-popover.js" defer></script>
+    <!---->
 
 
 </head>
@@ -28,13 +34,19 @@
     <div class="collapse navbar-collapse" id="navbarToggler">
         <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/main">Главная</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Link</a>
+                <a class="nav-link"  href="/books">Все книги</a>
+            </li>
+            <li>
+                <a class="nav-link"  href="/books/my">Мои книги</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#">Disabled</a>
+                <a class="nav-link" href="/authors">Все авторы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/people">Все пользователи</a>
             </li>
         </ul>
         <div class="flex-center">
@@ -42,57 +54,51 @@
                 <a href="/auth/login" class="btn btn-outline-primary btn-sm">Вход</a>
                 <a href="/auth/registration" class="btn btn-primary btn-sm">Регистрация</a>
             </div>
-            <div th:if="${user != null}" class="flex-center">
-                <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
-                     class="avatar-img">
+            <div th:if="${user != null}" class="flex-center user-info">
 
-                <form th:method="post" th:action="${'/logout'}">
-                    <input type="submit" th:value="Выйти" class="btn btn-link">
-                </form>
-                <span th:text="${user.getName()}"></span>
-                <span th:text="${user.getSurname()}"></span>
+                <div class="popover-parent">
+                    <!--                    -->
+                    <div class="popover-child is-hidden">
+                        <ul>
+                            <li class="popover-child__list-item flex-center">
+                                <a th:href="@{/people/{id}(id=${user.getId()})}" class="full-size flex-center popover-child__list-item-link">Профиль</a>
+                            </li>
+                            <li class="popover-child__list-item flex-center">
+                                <form th:method="post" th:action="${'/logout'}" class="full-size flex-center">
+                                    <input type="submit" th:value="Выйти"
+                                           class="btn btn-link pb-0 pt-0 full-size flex-center popover-child__list-item-link">
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!--                    -->
+                    <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+                         class="avatar-img">
+                </div>
+                <div class="user-info__full-name">
+                    <span th:text="${user.getName()}" class="popover-child__name"></span>
+                    <span th:text="${user.getSurname()}" class="popover-child__surname"></span>
+                </div>
             </div>
 
         </div>
     </div>
 </nav>
 <!---->
-<nav class="container">
-    <ul>
-        <li><a href="/books/">Все книги</a></li>
-        <li><a href="/books/search/">Поиск книг</a></li>
-        <li><a href="/authors/">Все авторы</a></li>
-        <li><a href="/people/">Все читатели</a></li>
-
-        <li><a href="/auth/login">Войти</a></li>
-        <li><a href="/auth/registration">Зарегистрироваться</a></li>
-    </ul>
-</nav>
-<!---->
 <main class="container">
-    <h2>Страница со списком всех людей</h2>
-    <div th:each="person : ${people}">
-        <a th:href="@{/people/{id}/(id=${person.getId()})}">
-            <span th:text="${person.getFullName()}"></span>,
-            <span th:text="${person.getBirthdayYear()}"></span>,
-            <span th:text="${person.getEmail()}"></span>
-        </a>
+    <h2>Все пользователи</h2>
+    <div th:each="person : ${people}" class="user-block">
+        <img th:src="@{/person-storage/{key}/(key=${person.getLastPersonImage().getKey()})}"
+             alt="аватарка"
+             class="user-block__avatar-img">
+        <div class="user-block__info-block">
+            <a th:href="@{/people/{id}/(id=${person.getId()})}">
+                <span th:text="${person.getFullName()}"></span>
+            </a>
+        </div>
     </div>
-    <a href="/people/new/">Добавить</a>
 </main>
 
-<!--
-Note: Popover content is read from "data-content" and "title" tags.
--->
-<button type="button" class="btn btn-secondary" data-container="body" data-toggle="popover" data-placement="bottom" data-content="Bottom">
-    Bottom popover
-</button>
-
-<!---->
-
-<script src="/js/jquery.min.js"></script>
-<script src="/js/popper.min.js"></script>
-<script src="/js/bootstrap.js"></script>
-<script src="/js/user-popover.js"></script>
 </body>
 </html>

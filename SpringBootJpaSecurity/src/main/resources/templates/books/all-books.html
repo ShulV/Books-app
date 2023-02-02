@@ -3,36 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <title>Book list</title>
+
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!---->
+    <script src="/js/jquery.min.js" defer></script>
+    <script src="/js/popper.min.js" defer></script>
+    <script src="/js/bootstrap.js" defer></script>
+    <script src="/js/user-popover.js" defer></script>
+    <!---->
 </head>
 <body>
-<div>
-    <ul>
-        <li><a href="/books/">Все книги</a></li>
-        <li><a href="/books/search/">Поиск книг</a></li>
-        <li><a href="/authors/">Все авторы</a></li>
-        <li><a href="/people/">Все читатели</a></li>
-
-        <li><a href="/people/sign-in/">Войти</a></li>
-        <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
-        <li>
-            <form th:method="POST" th:action="@{/logout}">
-                <input type="submit" value="Выйти" />
-            </form>
-        </li>
-    </ul>
-</div>
 <!---->
-<h2>Страница со списком всех книг</h2>
-<div th:each="book : ${books}">
-    <a th:href="@{/books/{id}/(id=${book.getId()})}">
-        <span th:text="${book.getName()}" th:style="${book.isOverdue()} ? 'color: red' : 'color: black' "></span>
-        <span th:text="${book.getYear()}"></span>
-        <ul th:each="author : ${book.getAuthors()}">
-            <li th:text="${author.getName()}"></li>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarToggler"
+            aria-controls="navbarToggler"
+            aria-expanded="false"
+            aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand" href="#">BOOK-HUB</a>
+
+    <div class="collapse navbar-collapse" id="navbarToggler">
+        <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+            <li class="nav-item active">
+                <a class="nav-link" href="/main">Главная</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link"  href="/books">Все книги</a>
+            </li>
+            <li>
+                <a class="nav-link"  href="/books/my">Мои книги</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/authors">Все авторы</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/people">Все пользователи</a>
+            </li>
         </ul>
-    </a>
-</div>
-<hr>
-<a href="/books/new/">Добавить</a>
+        <div class="flex-center">
+            <div th:if="${user == null}">
+                <a href="/auth/login" class="btn btn-outline-primary btn-sm">Вход</a>
+                <a href="/auth/registration" class="btn btn-primary btn-sm">Регистрация</a>
+            </div>
+            <div th:if="${user != null}" class="flex-center user-info">
+
+                <div class="popover-parent">
+                    <!--                    -->
+                    <div class="popover-child is-hidden">
+                        <ul>
+                            <li class="popover-child__list-item flex-center">
+                                <a th:href="@{/people/{id}(id=${user.getId()})}" class="full-size flex-center popover-child__list-item-link">Профиль</a>
+                            </li>
+                            <li class="popover-child__list-item flex-center">
+                                <form th:method="post" th:action="${'/logout'}" class="full-size flex-center">
+                                    <input type="submit" th:value="Выйти"
+                                           class="btn btn-link pb-0 pt-0 full-size flex-center popover-child__list-item-link">
+                                </form>
+                            </li>
+
+                        </ul>
+                    </div>
+                    <!--                    -->
+                    <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+                         class="avatar-img">
+                </div>
+                <div class="user-info__full-name">
+                    <span th:text="${user.getName()}" class="popover-child__name"></span>
+                    <span th:text="${user.getSurname()}" class="popover-child__surname"></span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</nav>
+<!---->
+<main class="container pb-2">
+    <h2>Страница со списком всех книг</h2>
+    <div th:each="book : ${books}" class="card">
+        <div class="card-body">
+            <h5 class="card-title"th:text="${book.getName()}" ></h5>
+            <h6 class="card-subtitle mb-2 text-muted"></h6>
+            <p class="card-text">
+            <span th:each="author : ${book.getAuthors()}">
+                <span th:text="${author.getName()}"></span>,
+            </span>
+            </p>
+            <a th:href="@{/books/{id}/(id=${book.getId()})}" class="card-link">Подробнее</a>
+        </div>
+
+
+<!--            <span th:text="${book.getName()}" th:style="${book.isOverdue()} ? 'color: red' : 'color: black' "></span>-->
+<!--            <span th:text="${book.getYear()}"></span>-->
+<!--            <ul th:each="author : ${book.getAuthors()}">-->
+<!--                <li th:text="${author.getName()}"></li>-->
+<!--            </ul>-->
+
+    </div>
+    <hr>
+    <a href="/books/new" class="btn btn-primary">Добавить</a>
+</main>
 </body>
 </html>

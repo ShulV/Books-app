@@ -4,46 +4,113 @@
   <meta charset="UTF-8">
   <title>Book editing form</title>
 
-  <link rel="stylesheet" type="text/css" href="../../assets/css/style.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!---->
+  <script src="/js/jquery.min.js" defer></script>
+  <script src="/js/popper.min.js" defer></script>
+  <script src="/js/bootstrap.js" defer></script>
+  <script src="/js/user-popover.js" defer></script>
+  <!---->
 </head>
 <body>
-<div>
-  <ul>
-    <li><a href="/books/">Все книги</a></li>
-    <li><a href="/books/search/">Поиск книг</a></li>
-    <li><a href="/authors/">Все авторы</a></li>
-    <li><a href="/people/">Все читатели</a></li>
-
-    <li><a href="/people/sign-in/">Войти</a></li>
-    <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
-  </ul>
-</div>
 <!---->
-<h2>Страница редактирования данных книги</h2>
-<form th:method="PATCH" th:action="@{/books/{id}/(id=${book.getId()})}" th:object="${book}" class="form">
-  <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
-  <div class="form__field">
-    <label th:for="name">Введите название:</label>
-    <input type="text" th:field="*{name}" id="name"/>
-  </div>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <button class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">BOOK-HUB</a>
 
-  <div style="color:red" th:if="${#fields.hasErrors('authorsIdString')}" th:errors="*{authorsIdString}">Authors Error</div>
-  <div class="form__field">
-    <label>Выберите человека: </label>
-    <select th:field="*{authorsIdString}" id="author" size="10" multiple="multiple">
-      <option th:each="author : ${authors}"
-              th:value="${author.getId()}"
-              th:text="${author.getName()}">
-      </option>
-    </select>
-  </div>
+  <div class="collapse navbar-collapse" id="navbarToggler">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="/main">Главная</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  href="/books">Все книги</a>
+      </li>
+      <li>
+        <a class="nav-link"  href="/books/my">Мои книги</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/authors">Все авторы</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/people">Все пользователи</a>
+      </li>
+    </ul>
+    <div class="flex-center">
+      <div th:if="${user == null}">
+        <a href="/auth/login" class="btn btn-outline-primary btn-sm">Вход</a>
+        <a href="/auth/registration" class="btn btn-primary btn-sm">Регистрация</a>
+      </div>
+      <div th:if="${user != null}" class="flex-center user-info">
 
-  <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
-  <div class="form__field">
-    <label th:for="date">Выберите дату:</label>
-    <input type="date" th:field="*{date}" id="date"/>
+        <div class="popover-parent">
+          <!--                    -->
+          <div class="popover-child is-hidden">
+            <ul>
+              <li class="popover-child__list-item flex-center">
+                <a th:href="@{/people/{id}(id=${user.getId()})}" class="full-size flex-center popover-child__list-item-link">Профиль</a>
+              </li>
+              <li class="popover-child__list-item flex-center">
+                <form th:method="post" th:action="${'/logout'}" class="full-size flex-center">
+                  <input type="submit" th:value="Выйти"
+                         class="btn btn-link pb-0 pt-0 full-size flex-center popover-child__list-item-link">
+                </form>
+              </li>
+
+            </ul>
+          </div>
+          <!--                    -->
+          <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+               class="avatar-img">
+        </div>
+        <div class="user-info__full-name">
+          <span th:text="${user.getName()}" class="popover-child__name"></span>
+          <span th:text="${user.getSurname()}" class="popover-child__surname"></span>
+        </div>
+      </div>
+
+    </div>
   </div>
-  <input class="form__btn-submit" type="submit" value="Изменить"/>
-</form>
+</nav>
+<!---->
+<main class="container">
+  <h2>Страница редактирования данных книги</h2>
+  <form th:method="PATCH" th:action="@{/books/{id}/(id=${book.getId()})}" th:object="${book}" class="form">
+    <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+    <div class="form__field">
+      <label th:for="name">Введите название:</label>
+      <input type="text" th:field="*{name}" id="name"/>
+    </div>
+
+    <div style="color:red" th:if="${#fields.hasErrors('authorsIdString')}" th:errors="*{authorsIdString}">Authors Error</div>
+    <div class="form__field">
+      <label>Выберите человека: </label>
+      <select th:field="*{authorsIdString}" id="author" size="10" multiple="multiple">
+        <option th:each="author : ${authors}"
+                th:value="${author.getId()}"
+                th:text="${author.getName()}">
+        </option>
+      </select>
+    </div>
+
+    <div style="color:red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}">Date Error</div>
+    <div class="form__field">
+      <label th:for="date">Выберите дату:</label>
+      <input type="date" th:field="*{date}" id="date"/>
+    </div>
+    <input class="form__btn-submit" type="submit" value="Изменить"/>
+  </form>
+</main>
+
+<!---->
 </body>
 </html>

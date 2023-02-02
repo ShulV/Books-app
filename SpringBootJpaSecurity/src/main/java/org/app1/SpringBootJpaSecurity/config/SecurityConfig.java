@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -28,13 +29,14 @@ public class SecurityConfig {
                 .authorizeRequests()
                 //пускать неаутентифицир. пользователя на эти страницы
 //                .antMatchers("/people/**").hasRole("ADMIN")
-                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
-                .anyRequest().hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/auth/login", "/auth/registration", "/error").permitAll()
+//                .anyRequest().hasAnyRole("USER", "ADMIN")
+                .anyRequest().permitAll()
                 .and()
                 //кастомная форма аутентификации
                 .formLogin().loginPage("/auth/login")
                 .loginProcessingUrl("/process_login")
-                .defaultSuccessUrl("/books/", true)
+                .defaultSuccessUrl("/people", true)
                 .failureUrl("/auth/login?error")
                 .and()
                 //разлогирование

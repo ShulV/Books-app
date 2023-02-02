@@ -7,6 +7,7 @@ import org.app1.SpringBootJpaSecurity.services.PeopleService;
 import org.app1.SpringBootJpaSecurity.util.PersonValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 
 @Controller
-@RequestMapping("/people/")
+@RequestMapping("/people")
 public class PeopleController {
 
 //    private final PersonDAO personDAO;
@@ -37,27 +38,29 @@ public class PeopleController {
     @GetMapping()
     public String index(Model model) {
         model.addAttribute("people", peopleService.getAllPeople());
-        Optional<Person> person = jpaUserDetailsService.getAuthenticatedUser();
-        person.ifPresent(value -> model.addAttribute("user", value));
+        Optional<Person> authUser = jpaUserDetailsService.getAuthenticatedUser();
+        authUser.ifPresent(value -> model.addAttribute("user", value));
         return "people/index";
     }
 
     //запрос на получение страницы с определенным человеком
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public String personPage(@PathVariable int id, Model model) {
         Optional<Person> person = peopleService.getPersonById(id);
         if (person.isPresent()) {
             model.addAttribute("person", person.get());
             model.addAttribute("books", peopleService.getBooksByPerson(id));
+            Optional<Person> authUser = jpaUserDetailsService.getAuthenticatedUser();
+            authUser.ifPresent(value -> model.addAttribute("user", value));
             return "people/person";
         }
         else {
-            return "redirect:/people/";
+            return "redirect:/people";
         }
     }
 
     //запрос на получение страницы добавления человека
-    @GetMapping("/new/")
+    @GetMapping("/new")
     public String newPerson(@ModelAttribute("person") Person person) {
         return "people/new-person";
     }
@@ -90,18 +93,21 @@ public class PeopleController {
             return "people/new-person";
 
         peopleService.save(person);
-        return "redirect:/people/";
+        return "redirect:/people";
     }
 
     //запрос на получение страницы изменения человека
-    @GetMapping("/{id}/edit/")
+    @GetMapping("/{id}/edit")
     public String editPersonPage(Model model, @PathVariable int id) {
         Optional<Person> selectedPerson = peopleService.getPersonById(id);
         if (selectedPerson.isPresent()) {
             model.addAttribute("person", selectedPerson.get());
+
+            Optional<Person> authUser = jpaUserDetailsService.getAuthenticatedUser();
+            authUser.ifPresent(value -> model.addAttribute("user", value));
             return "/people/edit-person";
         }
-        return "redirect:/people/";
+        return "redirect:/people";
     }
 
     //запрос на редактирование человека

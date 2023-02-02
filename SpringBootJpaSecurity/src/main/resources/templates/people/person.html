@@ -3,53 +3,135 @@
 <head>
   <meta charset="UTF-8">
   <title>Person</title>
+
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+  <!---->
+  <script src="/js/jquery.min.js" defer></script>
+  <script src="/js/popper.min.js" defer></script>
+  <script src="/js/bootstrap.js" defer></script>
+  <script src="/js/user-popover.js" defer></script>
+  <!---->
 </head>
 <body>
-<div>
-  <ul>
-    <li><a href="/books/">Все книги</a></li>
-    <li><a href="/books/search/">Поиск книг</a></li>
-    <li><a href="/authors/">Все авторы</a></li>
-    <li><a href="/people/">Все читатели</a></li>
+<!---->
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <button class="navbar-toggler"
+          type="button"
+          data-toggle="collapse"
+          data-target="#navbarToggler"
+          aria-controls="navbarToggler"
+          aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">BOOK-HUB</a>
 
-    <li><a href="/people/sign-in/">Войти</a></li>
-    <li><a href="/people/sign-up/">Зарегистрироваться</a></li>
-  </ul>
-</div>
-<!---->
-<h2>Страница с информацией о человеке</h2>
-<!---->
-<div>
-  <span th:text="${person.getFullName()}"></span>,
-  <span th:text="${person.getBirthdayYear()}"></span>,
-  <span th:text="${person.getEmail()}"></span>
-  <img th:src="@{/person-storage/{key}(key=${person.getLastPersonImage().getKey()})}">
-</div>
-<hr>
-<!---->
-<div th:if="${#lists.isEmpty(books)}">
-  <p>Человека пока не взял ни одной книги</p>
-</div>
-<!---->
-<div th:unless="${#lists.isEmpty(books)}">
-  <h4>Книги:</h4>
-  <div th:each="book : ${books}">
-    <a th:href="@{/books/{id}/(id=${book.getId()})}">
-      <span th:text="${book.getName()}"></span>,
-      <span th:text="${book.getYear()}"></span>
-    </a>
+  <div class="collapse navbar-collapse" id="navbarToggler">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+      <li class="nav-item active">
+        <a class="nav-link" href="/main">Главная</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link"  href="/books">Все книги</a>
+      </li>
+      <li>
+        <a class="nav-link"  href="/books/my">Мои книги</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/authors">Все авторы</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/people">Все пользователи</a>
+      </li>
+    </ul>
+    <div class="flex-center">
+      <div th:if="${user == null}">
+        <a href="/auth/login" class="btn btn-outline-primary btn-sm">Вход</a>
+        <a href="/auth/registration" class="btn btn-primary btn-sm">Регистрация</a>
+      </div>
+      <div th:if="${user != null}" class="flex-center user-info">
+
+        <div class="popover-parent">
+          <!--                    -->
+          <div class="popover-child is-hidden">
+            <ul>
+              <li class="popover-child__list-item flex-center">
+                <a th:href="@{/people/{id}(id=${user.getId()})}" class="full-size flex-center popover-child__list-item-link">Профиль</a>
+              </li>
+              <li class="popover-child__list-item flex-center">
+                <form th:method="post" th:action="${'/logout'}" class="full-size flex-center">
+                  <input type="submit" th:value="Выйти"
+                         class="btn btn-link pb-0 pt-0 full-size flex-center popover-child__list-item-link">
+                </form>
+              </li>
+
+            </ul>
+          </div>
+          <!--                    -->
+          <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+               class="avatar-img">
+        </div>
+        <div class="user-info__full-name">
+          <span th:text="${user.getName()}" class="popover-child__name"></span>
+          <span th:text="${user.getSurname()}" class="popover-child__surname"></span>
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
+</nav>
 <!---->
-<hr>
-<!---->
-<form th:method="GET" th:action="@{/people/{id}/edit/(id=${person.getId()})}">
-  <input type="submit" value="Редактировать"/>
-</form>
-<!---->
-<form th:method="DELETE" th:action="@{/people/{id}/(id=${person.getId()})}">
-  <input type="submit" value="Удалить"/>
-</form>
+<main>
+  <!-- Шапка профиля -->
+  <div class="container p-0 block-br user-page__up-block">
+    <div class="user-page__info block-br bg-white">
+      <div class="user-page__info-container">
+        <div th:text="${person.getFullName()}" class="user-page__info-full-name"></div>
+        <div class="user-page__info-birthdate">
+          Год рождения: <span th:text="${person.getBirthdayYear()}"></span>
+        </div>
+        <div class="user-page__info-email">
+          Email: <span th:text="${person.getEmail()}"></span>
+        </div>
+      </div>
+      <div class="user-page__info-buttons-container">
+        <form th:method="GET" th:action="@{/people/{id}/edit/(id=${person.getId()})}">
+          <input type="submit" value="Редактировать" class="btn btn-primary"/>
+        </form>
+        <!---->
+        <form th:method="DELETE" th:action="@{/people/{id}/(id=${person.getId()})}">
+          <input type="submit" value="Удалить" class="btn btn-danger ml-2"/>
+        </form>
+      </div>
+    </div>
+
+    <img th:src="@{/person-storage/{key}(key=${person.getLastPersonImage().getKey()})}"
+         class="user-page__avatar">
+  </div>
+  <!-- Блок книг человека -->
+  <div class="container p-0">
+    <div class="user-page__books-container block-br bg-white">
+      <!---->
+      <div th:if="${#lists.isEmpty(books)}">
+        <p>Человека пока не взял ни одной книги</p>
+      </div>
+      <!---->
+      <div th:unless="${#lists.isEmpty(books)}">
+        <h4>Книги:</h4>
+        <div th:each="book : ${books}">
+          <a th:href="@{/books/{id}/(id=${book.getId()})}">
+            <span th:text="${book.getName()}"></span>,
+            <span th:text="${book.getYear()}"></span>
+          </a>
+        </div>
+      </div>
+      <!---->
+    </div>
+
+  </div>
+  <!--  -->
+</main>
 <!---->
 </body>
 </html>
