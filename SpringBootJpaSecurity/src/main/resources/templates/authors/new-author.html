@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Author adding form</title>
@@ -37,13 +39,17 @@
             <li class="nav-item">
                 <a class="nav-link"  href="/books">Все книги</a>
             </li>
+            <!--     только авторизованным (isAuthenticated())     -->
+            <!--     sec:authorize="hasAnyRole('USER', 'LIBRARIAN', 'MODER', 'ADMIN')"-->
             <li>
-                <a class="nav-link"  href="/books/my">Мои книги</a>
+                <a sec:authorize="isAuthenticated()"
+                   class="nav-link" th:href="${'/books?readerId='+user.getId()}">Мои книги</a>
             </li>
+            <!--            -->
             <li class="nav-item">
                 <a class="nav-link" href="/authors">Все авторы</a>
             </li>
-            <li class="nav-item">
+            <li sec:authorize="isAuthenticated()" class="nav-item">
                 <a class="nav-link" href="/people">Все пользователи</a>
             </li>
         </ul>

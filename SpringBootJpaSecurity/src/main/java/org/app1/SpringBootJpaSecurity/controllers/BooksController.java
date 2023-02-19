@@ -3,11 +3,13 @@ package org.app1.SpringBootJpaSecurity.controllers;
 
 import org.app1.SpringBootJpaSecurity.models.Book;
 import org.app1.SpringBootJpaSecurity.models.Person;
+import org.app1.SpringBootJpaSecurity.models.SecurityUser;
 import org.app1.SpringBootJpaSecurity.services.AuthorsService;
 import org.app1.SpringBootJpaSecurity.services.BooksService;
 import org.app1.SpringBootJpaSecurity.services.JpaUserDetailsService;
 import org.app1.SpringBootJpaSecurity.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +20,7 @@ import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Controller
@@ -40,15 +43,25 @@ public class BooksController {
     //запрос на получение страницы со списком всех книг
     @GetMapping()
     public String allBooksPage(@NotNull Model model,
+                               @RequestParam(name = "readerId", required = false) Integer readerId,
                                @RequestParam(name = "page", required = false) Integer page,
                                @RequestParam(name = "books_per_page", required = false) Integer booksPerPage,
                                @RequestParam(name = "sort_by_date", required = false) boolean sortByDate) {
         List<Book> books = new ArrayList<>();
         if (page == null || booksPerPage == null)
             books = booksService.findAll(sortByDate);
-
         else
             books = booksService.findWithPagination(page, booksPerPage, sortByDate);
+
+        if(readerId != null) {
+            books = books.stream().filter(book->{
+                Person owner = book.getOwner();
+                if(owner == null) return false;
+                return owner.getId() == readerId;
+                    })
+                    .collect(Collectors.toList());;
+        }
+
         model.addAttribute("books", books);
 
         Optional<Person> authUser = jpaUserDetailsService.getAuthenticatedUser();
