@@ -69,7 +69,7 @@
             </ul>
           </div>
           <!--                    -->
-          <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+          <img th:src="@{/api/images/{id}(id=${person.getLastPersonImage().getId()})}"
                class="avatar-img">
         </div>
         <div class="user-info__full-name">
@@ -97,28 +97,29 @@
       </div>
       <div class="user-page__info-buttons-container">
         <form th:method="GET" th:action="@{/people/{id}/edit/(id=${person.getId()})}">
-          <input type="submit" value="Редактировать" class="btn btn-primary"/>
+          <input type="submit" value="Редактировать" class="btn btn-primary btn-sm"/>
         </form>
         <!---->
         <form th:method="DELETE" th:action="@{/people/{id}/(id=${person.getId()})}">
-          <input type="submit" value="Удалить" class="btn btn-danger ml-2"/>
+          <input type="submit" value="Удалить" class="btn btn-danger btn-sm ml-2"/>
         </form>
       </div>
     </div>
 
-    <img th:src="@{/person-storage/{key}(key=${person.getLastPersonImage().getKey()})}"
+    <img th:src="@{/api/images/{id}(id=${person.getLastPersonImage().getId()})}"
          class="user-page__avatar">
   </div>
   <!-- Блок книг человека -->
   <div class="container p-0">
     <div class="user-page__books-container block-br bg-white">
       <!---->
+      <h4>Книги:</h4>
+      <hr>
       <div th:if="${#lists.isEmpty(books)}">
         <p>Человека пока не взял ни одной книги</p>
       </div>
       <!---->
       <div th:unless="${#lists.isEmpty(books)}">
-        <h4>Книги:</h4>
         <div th:each="book : ${books}">
           <a th:href="@{/books/{id}/(id=${book.getId()})}">
             <span th:text="${book.getName()}"></span>,

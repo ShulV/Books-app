@@ -73,7 +73,7 @@
                         </ul>
                     </div>
                     <!--                    -->
-                    <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+                    <img th:src="@{/api/images/{id}(id=${user.getLastPersonImage().getId()})}"
                          class="avatar-img">
                 </div>
                 <div class="user-info__full-name">
@@ -89,11 +89,11 @@
 <main class="container">
     <h2>Все пользователи</h2>
     <div th:each="person : ${people}" class="user-block">
-        <img th:src="@{/person-storage/{key}/(key=${person.getLastPersonImage().getKey()})}"
+        <img th:src="@{/api/images/{id}(id=${person.getLastPersonImage().getId()})}"
              alt="аватарка"
              class="user-block__avatar-img">
         <div class="user-block__info-block">
-            <a th:href="@{/people/{id}/(id=${person.getId()})}">
+            <a th:href="@{/people/{id}(id=${person.getId()})}">
                 <span th:text="${person.getFullName()}"></span>
             </a>
         </div>

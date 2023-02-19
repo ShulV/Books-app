@@ -39,7 +39,8 @@ public class ImagesController {
     public ResponseEntity<Resource> download(@PathVariable("id") Long id) throws IOException {
         Optional<PersonImageInfo> foundFile = imagesService.findById(id);
         if (foundFile.isPresent()) {
-            Resource resource = imagesService.download(foundFile.get().getKey());
+            String key = foundFile.get().getKey();
+            Resource resource = imagesService.download(key);
             return ResponseEntity.ok()
                     .header("Content-Disposition",
                             "file; filename=" +

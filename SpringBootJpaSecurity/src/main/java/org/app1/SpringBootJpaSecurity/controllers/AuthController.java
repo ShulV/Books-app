@@ -19,7 +19,6 @@ public class AuthController {
 
     private final PersonValidator personValidator;
     private final RegistrationService registrationService;
-
     private final ImagesService imagesService;
 
     @Autowired
