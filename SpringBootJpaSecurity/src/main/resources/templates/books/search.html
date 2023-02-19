@@ -69,7 +69,7 @@
                         </ul>
                     </div>
                     <!--                    -->
-                    <img th:src="@{/person-storage/{key}/(key=${user.getLastPersonImage().getKey()})}"
+                    <img th:src="@{/api/images/{id}(id=${user.getLastPersonImage().getId()})}"
                          class="avatar-img">
                 </div>
                 <div class="user-info__full-name">
