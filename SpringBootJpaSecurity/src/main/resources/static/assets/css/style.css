@@ -67,6 +67,7 @@ body {
     left: 0;
     height: 40px;
     width: 40px;
+    object-fit: cover;
     border-radius: 50%;
     cursor: pointer;
 }
@@ -160,7 +161,8 @@ body {
 .user-block__avatar-img {
     height: 100px;
     width: 100px;
-    border-radius: 5px;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .user-block__info-block {

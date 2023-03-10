@@ -1,5 +1,8 @@
 package org.app1.SpringBootJpaSecurity;
 
+import com.vk.api.sdk.client.TransportClient;
+import com.vk.api.sdk.client.VkApiClient;
+import com.vk.api.sdk.httpclient.HttpTransportClient;
 import org.app1.SpringBootJpaSecurity.services.PeopleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,4 +50,8 @@ public class SpringBootJpaSecurityApplication {
 		SpringApplication.run(SpringBootJpaSecurityApplication.class, args);
 	}
 
+	@Bean
+	public VkApiClient getVkApiClient() {
+		return new VkApiClient(HttpTransportClient.getInstance());
+	}
 }
